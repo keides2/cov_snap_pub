@@ -1,148 +1,96 @@
-# cov_snap
+﻿**English** | [日本語](README_ja.md)
 
-Coverity Connect サーバーからスナップショットを取得します。
-bug_report 実行環境がある場合は、ChatGPT を利用したバグレポートを作成することができます（bug_report と連携します）。
+# cov_snap (sanitized release)
 
-## 概要
+This project provides utility scripts for Coverity® Connect snapshot collection, report generation, and automation of surrounding tasks such as bug-report exports and CSV packaging.
 
-cov_snap は Coverity Connect サーバー（CC）に登録されているすべてのスナップショットの指摘を抽出するスクリプトです。ハンバーガーメニューからエクスポートしても取得できないソースコードビューのマイルストーン等の指摘も取得できます。
+## Overview
+- Gather snapshot metadata and issues for designated projects/streams.
+- Package CSV outputs and optionally compress them for distribution.
+- Support multi-step workflows (pure snapshot export, GitLab-integrated modes, Perforce-integrated mode).
+- Companion scripts (e.g., `bug_report`, Outlook VBA scripts) automate e-mail delivery.
+- Uses the shared `covautolib_3` module for Coverity REST API access.
 
-また、Azure OpenAI Service を利用して、指摘内容をCSVファイルから詳細なレポートを作成することもできます（bug_report_2.py が必要）。
+## Features
+- Configurable snapshot modes aligned with common operational cadences (3-day, 4-day, weekly, Perforce scenarios).
+- Automated CSV gathering, ZIP packaging, and address-book based e-mail delivery.
+- Optional Azure OpenAI integration (`bug_report_2.py`) for natural-language report drafting.
 
-## 機能
-
-### メール送信による自動実行
-Outlook を使用して、件名の先頭を識別子 `[cov_snap]` で始まり、空白区切りで引数を指定した内容のメールを送信することで、このバッチファイルが起動します（Outlook VBA が必要）。
-
-### 対応する実行パターン
-
-#### 3引数モード
-- CC から指摘を取得（cov_snap）、bug_report を起動、CSVファイル（圧縮したZIPファイル）を送信者のみに返信
-- ソースコードは GitLab から取得しません
-```
-[cov_snap] cc_stream_name 14090
-```
-```bash
-cov_snap_2.bat cc_stream_name 14090 sender@example.com
-```
-
-#### 4引数モード
-- CC から指摘を取得（cov_snap）、bug_report を起動、CSVファイル（圧縮したZIPファイル）をアドレスファイルに登録されたメールアドレスに返信
-- ソースコードは GitLab から取得しません
-```
-[cov_snap] gitlab_group_name cc_stream_name 14090
-```
-```bash
-cov_snap_2.bat gitlab_group_name cc_stream_name 14090 sender@example.com
-```
-
-#### 7引数モード
-- ソースコードを GitLab から取得し、cov_snap, bug_report を起動、CSVファイル（圧縮したZIPファイル）をアドレスファイルに登録されたメールアドレスに返信
-```
-[cov_snap] gitlab_group_name gitlab_project_name gitlab_branch_name cc_group_name cc_stream_name 15076 sender@example.com
-```
-```bash
-cov_snap_2.bat gitlab_group_name gitlab_project_name gitlab_branch_name cc_group_name cc_stream_name 15076 sender@example.com
-```
-
-#### 8引数モード（Perforce対応）
-- ソースコードを Perforce から取得し、cov_snap を起動、CSVファイル（圧縮したZIPファイル）をアドレスファイルに登録されたメールアドレスに返信
-- bug_report は起動しません
-```
-[cov_snap] p4_group_name //depot/p4_group_name/ head cc_group_name cc_stream_name 15048 sender@example.com
-```
-
-## 必要な環境
-
-### システム要件
-- Windows 10 以降
+## Requirements
+- Windows 10 or later
 - Python 3.8+
-- Git（GitLab連携時）
-- Perforce P4 CLI（Perforce連携時）
-- Microsoft Outlook（メール送信時）
+- Git (for GitLab integration), Perforce CLI (if using Perforce mode)
+- Microsoft Outlook (for automated mail delivery)
+- Python packages: `suds-community`, `requests`, `pandas`, `openpyxl`
 
-### 必要なディレクトリ
-以下のディレクトリが必要です：
-```
-c:\cov\
-c:\cov\groups\
-c:\cov\log\
-S:\path\to\config\
-S:\path\to\address\
-```
-
-### Python モジュール
-以下のPythonモジュールが必要です：
-
-#### 必須モジュール
 ```bash
-pip install suds-community
-pip install requests
-pip install pandas
-pip install openpyxl
+pip install suds-community requests pandas openpyxl
 ```
 
-#### Coverity Connect API用ライブラリ
-```bash
-# このスクリプトは、別リポジトリの covautolib パッケージを利用します
-# 事前に covautolib をインストールしてください
+## Dependency on covautolib_3
+`cov_snap.py` imports `covautolib_3` (`from covautolib import covautolib_3`). Ensure the module is accessible either by installing this repository’s sanitized covautolib package or adjusting `PYTHONPATH`:
 
-# GitHubからクローンしてインストールする場合
-git clone https://github.com/keides2/covautolib.git
-cd covautolib
-pip install -e .
+```powershell
+# Install sibling covautolib_pub as editable
+pip install -e ..\covautolib_pub
 
-# または、PYTHONPATH で指定する場合
-# Windows (コマンドプロンプト)
-set PYTHONPATH=C:\path\to\covautolib\parent\directory
-
-# Linux (ターミナル)
-export PYTHONPATH=/path/to/covautolib/parent/directory
+# or temporarily extend PYTHONPATH
+$env:PYTHONPATH = "C:\Users\HP\Docs\Security\covautolib_pub"
 ```
 
-**注意**: `covautolib` は別途インストールが必要な依存ライブラリです。詳細は [covautolib リポジトリ](https://github.com/keides2/covautolib) を参照してください。
-
-### 環境変数
-以下の環境変数の設定が必要です：
 ```bash
-# Coverity Connect認証情報
+pip install -e ../covautolib_pub
+export PYTHONPATH="$(pwd)/../covautolib_pub"
+```
+
+## Environment variables
+Set the following before running scripts (PowerShell syntax shown):
+
+```powershell
 set COVAUTHUSER=your_username
 set COVAUTHKEY=your_auth_key
-
-# プロキシ設定（必要な場合）
 set HTTP_PROXY=http://proxy.example.com:port/
 set HTTPS_PROXY=http://proxy.example.com:port/
 ```
 
-## 設定ファイル
+Other variables may be required depending on your deployment (see `.env.example` in `covautolib_pub`).
 
-### last.json
-初回実行時は空の配列 `[]` で開始されます。実行後は実際のプロジェクト・ストリーム・スナップショット情報で更新されます。
-
-### アドレスファイル
-グループ別のメール送信先を管理：
+## Directory structure
+Ensure working directories exist (adjust paths to suit your layout):
 ```
-group_name_address.csv
-group_name_address_auth.csv  # 認定ユーザーのみ
+C:\cov\
+C:\cov\groups\
+C:\cov\log\
+S:\path\to\config\
+S:\path\to\address\
 ```
 
-## API通信
-- すべての情報は SOAP API を使用して取得されます（mergeKey による結合も実行）
-- CSV ファイルを生成し、ZIP ファイルに圧縮します
-- 結果は CC 画面の設定（歯車アイコン）で「詳細ビュー表示」にチェックした状態で取得した結果と同じです
+## Running cov_snap.py
+Typical invocation patterns (adapt as needed):
 
-## 注意事項
-- Coverity ライセンス数の制限により、**ライセンスを保有する認定ユーザーのみ**が指摘結果を取得できます
-- CC に登録されている認定ユーザーのみに配信されます
-- このバッチファイルは Outlook VBA `ThisOutlookSession_2.vba` から起動されます
+```text
+[cov_snap] cc_stream_name 14090
+[cov_snap] gitlab_group_name cc_stream_name 14090
+[cov_snap] gitlab_group_name gitlab_project_name gitlab_branch_name cc_group_name cc_stream_name 15076 sender@example.com
+[cov_snap] p4_group_name //depot/p4_group_name/ head cc_group_name cc_stream_name 15048 sender@example.com
+```
 
-## 単体実行
-Python スクリプト `cov_snap.py` を直接起動する場合、メールによる配信は行われません。
+Corresponding batch helper (`cov_snap_2.bat`) mirrors the same argument order when e-mailing results.
 
-引数なしで実行すると全プロジェクトを検索しますが、処理時間が長く、途中で異常終了する可能性があるため、全プロジェクトを検索する場合は `cov_snap.py` を直接実行してください。
+## Auxiliary configuration
+- `last.json`: runtime cache of processed snapshots (initially `[]`).
+- Address book CSVs (e.g., `group_name_address.csv`, `group_name_address_auth.csv`) are used to look up distribution lists.
 
-## ライセンス
-MIT License - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+## API usage
+- Primarily interacts with Coverity SOAP APIs; restructure or extend as needed for REST-based endpoints.
+- Generated CSVs are zipped for transport and archival.
+- Some routines expect Coverity dashboard filters to be preconfigured (“詳細ビュー” references in comments).
 
-## 作者
+## Outlook automation
+To send mail automatically, enable the included Outlook VBA script (`ThisOutlookSession_2.vba`). The batch files assume Outlook is configured and accessible.
+
+## License
+MIT License — see [LICENSE](LICENSE).
+
+## Maintainer
 Keisuke Shimatani (keides2)
