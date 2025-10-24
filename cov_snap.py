@@ -2246,7 +2246,12 @@ def main(stream_name, snapshot_id, sender_email):
         # その過程で、スナップショットの指摘一覧（JSON、CSV、ZIP）を生成する
 
         # 認定ユーザーの有効無効判定
-        if AUTH_USER_ENABLE:
+        # cov_auto_5.bat から呼び出される場合はダミーアドレスなのでチェックをスキップ
+        if sender_email == "noreply@example.com":
+            # ダミーアドレスの場合は認証チェックをスキップ
+            log.logger.info("[main] 認証チェックをスキップ（ダミーアドレス: %s）", sender_email)
+            pass
+        elif AUTH_USER_ENABLE:
             # 利用者が認定ユーザであるか判定する
             # 利用者（の電子メール）が認定ユーザーの場合、ユーザーIDを得る
             covapi = covautolib_3.COVApi()

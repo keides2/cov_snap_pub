@@ -43,7 +43,7 @@ from suds.wsse import Security, UsernameToken
 #   export PYTHONPATH=/home/username
 #
 # Coverity Connect API モジュール集の利用
-from covautolib.covautolib_2 import COVApi, LOGGER_2
+from covautolib.covautolib_3 import COVApi, LOGGER_2
 
 # proxy
 proxies_dic = {
