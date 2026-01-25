@@ -1,6 +1,6 @@
 [English](README_EN.md) | **日本語**
 
-# cov_snap
+# CovSnap
 
 ![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![Python](https://img.shields.io/badge/python-3.8+-blue)
@@ -181,53 +181,6 @@ python src\cov_snap_standalone.py my_project_stream 50183
 # → 使用方法が表示され、エラーレベル705で終了します
 ```
 
-詳細は [QUICKSTART.md](packaging/template/QUICKSTART.md) を参照。
-
-## 📚 ドキュメント
-
-### REST API移行関連（NEW! 2026年1月）
-
-- **[REST_API_MIGRATION_COMPLETE.md](docs/REST_API_MIGRATION_COMPLETE.md)** (約1000行)
-  - SOAP API vs REST API 完全対応表
-  - 実装の詳細解説
-  - パフォーマンス比較
-  - トラブルシューティング
-
-- **[TEST_SCRIPTS_GUIDE.md](docs/TEST_SCRIPTS_GUIDE.md)** (約600行)
-  - テストスクリプト実行マニュアル
-  - 各テストの詳細な手順
-  - エラー対処方法
-
-- **[REST_API_MIGRATION_SUMMARY.md](docs/REST_API_MIGRATION_SUMMARY.md)** (約300行)
-  - 移行作業のサマリー
-  - 主要な成果
-  - 次のステップ
-
-### その他のドキュメント
-
-- `docs/` - 詳細なドキュメント一式
-- `tests/` - テストスクリプトとサンプルデータ
-
-## 🧪 テスト
-
-4つのテストスクリプトで品質を保証:
-
-```powershell
-# 1. APIエンドポイント直接テスト（1秒）
-python tests\test_source_code_info_endpoint.py
-
-# 2. メソッド統合テスト（2秒）
-python tests\test_get_source_code_info_integration.py
-
-# 3. ページング処理テスト（5秒）
-python tests\test_pagination.py
-
-# 4. 完全統合テスト（実環境のみ、10秒）
-python tests\test_integration_stage2.py
-```
-
-詳細は [TEST_SCRIPTS_GUIDE.md](docs/TEST_SCRIPTS_GUIDE.md) を参照。
-
 ## 🚀 最近の更新
 
 ### 2026年1月19日 - ストリーム名ベース引数に簡素化
@@ -236,8 +189,6 @@ python tests\test_integration_stage2.py
 - ✅ `group_name` 引数を削除（ストリーム名のみで動作）
 - ✅ アドレスファイルをストリーム名ベースに変更 (`{stream_name}_address.csv`)
 - ✅ `extract_certified_users_by_stream()` 関数を実装
-- ✅ アドレスファイル生成スクリプト `generate_stream_address_files.py` を追加
-- ✅ 83個のExcel申請書から自動的にストリーム→グループマッピングを生成
 
 **引数の変更**:
 - MODE 1（旧）: `group_name stream_name snapshot_id sender_email`
@@ -307,29 +258,6 @@ Cc,user2@example.com
 Bcc,user3@example.com
 ```
 
-### アドレスファイル生成スクリプト
-
-GitLab Coverity利用申請Excelファイルから自動生成：
-
-```powershell
-cd scripts
-python generate_stream_address_files.py
-```
-
-**処理内容**:
-1. 83個のExcel申請書から「⑥cov_auto新規申請」シートを読み込み
-2. GitLabグループ→Coverityストリームのマッピングを抽出
-3. 既存の `{group}_address.csv` を `{stream}_address.csv` にコピー
-4. マッピング情報を `stream_to_group_mapping.json` に保存
-
-**生成例**: 20ストリーム分のアドレスファイル
-- `project_a_stream_address.csv`
-- `project_b_stream_address.csv`
-- `project_c_stream_address.csv`
-- など
-
-詳細は [scripts/README.md](scripts/README.md) を参照。
-
 ## 🛠️ トラブルシューティング
 
 ### よくある問題
@@ -346,8 +274,6 @@ Test-Path "C:\cov\auth-key\auth-key.txt"
 Test-NetConnection coverity.example.com -Port 443
 ```
 
-詳細は [TEST_SCRIPTS_GUIDE.md](docs/TEST_SCRIPTS_GUIDE.md) の「トラブルシューティング」セクションを参照。
-
 ## 📞 サポート
 
 - **技術ドキュメント**: `docs/` ディレクトリ
@@ -356,7 +282,7 @@ Test-NetConnection coverity.example.com -Port 443
 
 ## 📄 ライセンス
 
-社内利用のため、ライセンス規定は社内規程に従います。
+MIT License
 
 ## 🤝 コントリビューション
 
@@ -364,10 +290,7 @@ Test-NetConnection coverity.example.com -Port 443
 2. 変更をコミット
 3. Merge Requestを作成
 
-詳細は社内開発ガイドラインを参照。
-
 ---
 
 **最終更新**: 2026年1月19日  
-**バージョン**: ストリーム名ベース引数対応版（REST API v2）  
-**メンテナー**: セキュリティーチーム
+**バージョン**: ストリーム名ベース引数対応版（REST API v2）

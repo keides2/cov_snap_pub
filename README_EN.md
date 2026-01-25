@@ -1,6 +1,12 @@
 **English** | [日本語](README.md)
 
-# cov_snap (sanitized release)
+# CovSnap
+
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Python](https://img.shields.io/badge/python-3.8+-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Coverity](https://img.shields.io/badge/Coverity-REST%20API%20v2-orange)
+![Status](https://img.shields.io/badge/status-production-brightgreen)
 
 Coverity Connect Snapshot Management Tool - REST API v2 Compatible
 
