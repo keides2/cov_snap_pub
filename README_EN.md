@@ -1,4 +1,4 @@
-**English** | [日本語](README_ja.md)
+**English** | [日本語](README.md)
 
 # cov_snap (sanitized release)
 
