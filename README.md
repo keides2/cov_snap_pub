@@ -71,7 +71,7 @@ Coverity Connectから静的解析結果（スナップショット）を取得�
 -  **CSVファイル活用** - CovSnapが生成する`snapshot_id_*.csv`を直接読み込み
 - 🚀 **オフライン作業** - CSVファイルがあればCoverityサーバーへの接続不要
 
-**📥 ダウンロード:** [COVLint - VS Marketplace](https://marketplace.visualstudio.com/items?itemName=keides.covlint) | [GitHub](https://github.com/keides2/cov_lint)
+**📥 ダウンロード:** [COVLint - VS Marketplace](https://marketplace.visualstudio.com/items?itemName=keides2.covlint) | [GitHub](https://github.com/keides2/cov_lint)
 
 ## 📁 ファイル構成
 

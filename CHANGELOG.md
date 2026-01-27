@@ -8,17 +8,30 @@
 ## [Unreleased]
 
 ### 追加
+- README/README_EN.md - COVLint連携情報セクション追加
+  * CovSnapのCSVファイルをVSCode拡張機能COVLintで活用できることを説明
+  * VS Marketplace と GitHub へのリンクを追加
+  * ソースコード上での指摘表示、オフライン作業のメリットを記載
 - coverity_rest_lib.py - Coverity Connect REST APIクライアントライブラリ
   * CoverityRestClientクラスを独立したモジュールとして分離
   * プロジェクト/ストリーム/スナップショット/指摘情報の取得機能
   * ページング処理対応（10,000件超の大量データ対応）
 
 ### 変更
+- README/README_EN.md - 詳細情報取得の説明を改善
+  * "個別CIDの詳細情報" → "ソースコード画面に表示される詳細情報" に変更
+  * より分かりやすい表現に改善
 - cov_snap_standalone.py
   * coverity_rest_lib から CoverityRestClient をインポート
   * スタンドアロンツールとして独立動作が可能に
+
+### 修正
+- README/README_EN.md - VS Marketplace リンク訂正
+  * keides.covlint → keides2.covlint に修正
   
 ### アーカイブ
+- README_ja.md を archive/ に移動
+  * メンテナンスの手間を削減（README.md を日本語版メインとして使用）
 - cov_snap.py (3,596行) を src/archive/ に移動
   * 旧バージョンを参照用として保存
   * 新アーキテクチャ移行のため、アクティブな依存関係から除外
