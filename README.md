@@ -47,7 +47,7 @@ flowchart LR
 
 ## 概要
 
-Coverity Connectから静的解析結果（スナップショット）を取得し、CSV形式で出力するPythonスクリプト。
+Coverity Connectから静的解析結果（スナップショット）を取得し、CSV形式で出力するPythonスクリプトです。
 
 **最新情報**: 2026年1月6日にSOAP APIからREST API v2への完全移行を完了しました 🎉
 
@@ -56,9 +56,22 @@ Coverity Connectから静的解析結果（スナップショット）を取得�
 - ✅ **スナップショット検索**: プロジェクト/ストリーム/スナップショットIDから指摘を取得
 - ✅ **CSV出力**: 指摘データをCSV形式でエクスポート
 - ✅ **ページング対応**: 10,000件超のデータも自動取得
-- ✅ **詳細情報取得**: 個別CIDの詳細情報を含む完全なデータ
+- ✅ **詳細情報取得**: ソースコード画面に表示される詳細情報を含む完全なデータ
 - ✅ **REST API v2対応**: Coverity 2024.6.0以降に完全対応
 - ✅ **モジュール化アーキテクチャ**: REST APIクライアントを独立したライブラリとして分離
+
+## 🔗 出力データの活用
+
+### COVLint - VSCode拡張機能との連携
+
+**[COVLint](https://github.com/keides2/cov_lint)** は、CovSnapで生成したCSVファイルを利用して、Visual Studio Code上でCoverityの指摘を直接表示するLSP（Language Server Protocol）拡張機能です。
+
+**✨ COVLintの主な機能:**
+- 🎯 **ソースコード上に指摘を表示** - Coverity Connectと同様の問題箇所ハイライト
+-  **CSVファイル活用** - CovSnapが生成する`snapshot_id_*.csv`を直接読み込み
+- 🚀 **オフライン作業** - CSVファイルがあればCoverityサーバーへの接続不要
+
+**📥 ダウンロード:** [COVLint - VS Marketplace](https://marketplace.visualstudio.com/items?itemName=keides.covlint) | [GitHub](https://github.com/keides2/cov_lint)
 
 ## 📁 ファイル構成
 
